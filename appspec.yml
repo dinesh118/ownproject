@@ -1,0 +1,18 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::EC2::Instance
+      Properties:
+        TaskDefinition: ""
+        LoadBalancerInfo:
+          TargetGroupInfoList: []
+        Platform: Windows
+Hooks:
+  - BeforeInstall:
+      - location: scripts/after-install.ps1
+        timeout: 300
+        runas: administrator
+  - AfterInstall:
+      - location: scripts/deploy-iis-bluegreen.ps1
+        timeout: 600
+        runas: administrator

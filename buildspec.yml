@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing build dependencies"
+      - choco install msbuild -y
+      - choco install nuget.commandline -y
+  build:
+    commands:
+      - echo "Restoring packages"
+      - nuget restore src/NetFramework4App/NetFramework4App.csproj -PackagesDirectory src/NetFramework4App/packages
+      - echo "Building solution"
+      - msbuild src/NetFramework4App/NetFramework4App.csproj /p:Configuration=Release /p:Platform="Any CPU"
+  post_build:
+    commands:
+      - echo "Preparing deployment artifact"
+      - mkdir -p artifacts
+      - robocopy src/NetFramework4App/bin artifacts/website /MIR
+      - if not exist artifacts/website\Web.config echo "Web.config not found"
+      - powershell -Command "Compress-Archive -Path artifacts/website/* -DestinationPath artifacts/netframework4app.zip -Force"
+artifacts:
+  files:
+    - artifacts/netframework4app.zip

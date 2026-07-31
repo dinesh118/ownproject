@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>.NET Framework 4 Sample</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .card { max-width: 700px; padding: 24px; border: 1px solid #ddd; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>.NET Framework 4 IIS Sample App</h1>
+    <p>This is a local preview of the app page.</p>
+    <p>Application deployed successfully.</p>
+    <p>Host: localhost</p>
+    <p>Timestamp: <span id="ts"></span></p>
+  </div>
+  <script>
+    document.getElementById('ts').textContent = new Date().toISOString();
+  </script>
+</body>
+</html>
