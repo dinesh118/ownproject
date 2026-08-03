@@ -1,0 +1,9 @@
+image: atlassian/default-image:3
+
+pipelines:
+  default:
+    - step:
+        name: Push source to AWS CodeCommit/CodePipeline trigger
+        script:
+          - echo "Bitbucket source trigger ready"
+          - echo "AWS CodeBuild and CodePipeline will handle build and deployment"

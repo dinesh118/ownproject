@@ -1,0 +1,26 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::EC2::Instance
+      Properties:
+        TaskDefinition: ""
+        LoadBalancerInfo:
+          TargetGroupInfoList: []
+        Platform: Windows
+Hooks:
+  - BeforeInstall:
+      - location: scripts/BeforeInstall.ps1
+        timeout: 300
+        runas: administrator
+  - AfterInstall:
+      - location: scripts/AfterInstall.ps1
+        timeout: 600
+        runas: administrator
+  - ApplicationStart:
+      - location: scripts/ApplicationStart.ps1
+        timeout: 300
+        runas: administrator
+  - ValidateService:
+      - location: scripts/ValidateService.ps1
+        timeout: 300
+        runas: administrator
