@@ -4,21 +4,7 @@ phases:
   install:
     commands:
       - echo "Checking Windows build tools"
-      - where.exe msbuild
-      - where.exe nuget
-  pre_build:
-    commands:
-      - echo "Restoring NuGet packages"
-      - powershell -NoProfile -Command "nuget restore .\\src\\NetFramework4App\\NetFramework4App.csproj -PackagesDirectory .\\packages -ConfigFile .\\nuget.config -NonInteractive"
-  build:
-    commands:
-      - echo "Building solution"
-      - powershell -NoProfile -Command "msbuild .\\src\\NetFramework4App\\NetFramework4App.csproj /p:Configuration=Release /p:Platform='Any CPU' /p:RestorePackages=false"
-  post_build:
-    commands:
-      - echo "Preparing CodeDeploy artifact"
-      - powershell -NoProfile -Command "$ErrorActionPreference='Stop'; New-Item -ItemType Directory -Force -Path .\\artifacts\\codedeploy\\app | Out-Null; New-Item -ItemType Directory -Force -Path .\\artifacts\\codedeploy\\scripts | Out-Null; Copy-Item .\\src\\NetFramework4App\\bin\\* .\\artifacts\\codedeploy\\app -Recurse -Force; Copy-Item .\\deployment\\appspec.yml .\\artifacts\\codedeploy\\appspec.yml -Force; Copy-Item .\\deployment\\scripts\\* .\\artifacts\\codedeploy\\scripts -Recurse -Force; if (-not (Test-Path '.\\artifacts\\codedeploy\\app\\Web.config')) { throw 'Web.config not found' }; if (-not (Test-Path '.\\artifacts\\codedeploy\\appspec.yml')) { throw 'appspec.yml not found' }; Compress-Archive -Path .\\artifacts\\codedeploy\\* -DestinationPath .\\artifacts\\Vidly.zip -Force"
-      - powershell -NoProfile -Command "$bucket = $env:S3_BUCKET_NAME; if ([string]::IsNullOrWhiteSpace($bucket)) { throw 'S3_BUCKET_NAME environment variable is required.' }; aws s3 cp .\\artifacts\\Vidly.zip s3://$bucket/$env:CODEBUILD_BUILD_ID/Vidly.zip --only-show-errors"
+      - powershell -NoProfile -File .\scripts\build.ps1
 
 artifacts:
   files:
