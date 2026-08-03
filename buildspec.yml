@@ -4,6 +4,10 @@ phases:
   install:
     commands:
       - echo "Checking Windows build tools"
+      - powershell -NoProfile -Command "$ErrorActionPreference='SilentlyContinue'; Write-Host 'Current directory:'; Get-Location; Write-Host 'Contents:'; Get-ChildItem; Write-Host 'PowerShell version:'; $PSVersionTable.PSVersion.ToString(); Write-Host 'Checking for MSBuild and NuGet...'; Get-Command msbuild.exe -ErrorAction SilentlyContinue | Format-Table -AutoSize; Get-Command nuget.exe -ErrorAction SilentlyContinue | Format-Table -AutoSize"
+  pre_build:
+    commands:
+      - echo "Running build script"
       - powershell -NoProfile -File .\scripts\build.ps1
 
 artifacts:
